@@ -9,8 +9,12 @@ $user_agent = sprintf('xmlstats-phpex/%s (%s)', $config['version'], $config['use
 
 $auth_header = sprintf('Authorization: Bearer %s', $config['access_token']);
 
+$cache_host = $config['memcache_host'];
+
+$cache_port = $config['memcache_port'];
+
 $memcache = new Memcache;
-$memcache->connect('localhost', 11211) or die ('Couldn\'t connect to memcache server. Is it running?');
+$memcache->connect($cache_host, $cache_port) or die ('Couldn\'t connect to memcache server. Is it running?');
 
 // Set the API sport, endpoint, id, format, and any parameters
 $host = 'erikberg.com';
