@@ -18,7 +18,7 @@ will vary depending on your operating system.
 
 ### Configure
 Specify your API access token and e-mail address in `xmlstats.ini`. Additionally, specify
-your memcache host and port if it not running on your local server at the default port.
+your memcache host and port if it is not running on your local server at the default port.
 
 ### Run
 Versions of PHP 5.4 and later provide a built-in server to develop and test PHP scripts quickly. Start
