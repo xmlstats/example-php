@@ -47,14 +47,14 @@ function httpGet($ua, $auth, $url)
 
 function showDate($d)
 {
-    if ($d) {
+    if (isset($d)) {
         echo $d->format('l, F j, Y');
     }
 }
 
 function dateAdd($date, $diff)
 {
-    if ($date) {
+    if (isset($date)) {
         $d = new DateTime($date->format('c'));
         if ($diff > 0) {
             $d->add(new DateInterval('P1D'));
