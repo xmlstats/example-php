@@ -29,7 +29,7 @@ $parameters = [
     'date' => date('Ymd')
 ];
 
-if ($_GET['d']) {
+if (isset($_GET['d'])) {
     $parameters['date'] = $_GET['d'];
 }
 
@@ -59,57 +59,57 @@ $date = DateTime::createFromFormat(DateTime::W3C, $events->events_date);
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
- font-family: sans-serif;
- color: #222;
+  font-family: sans-serif;
+  color: #222;
 }
 table {
- width: 100%;
- max-width: 300px;
- border: solid 1px #ccc;
- float: left;
- margin: 1em;
- border-collapse: collapse;
+  width: 100%;
+  max-width: 300px;
+  border: solid 1px #ccc;
+  float: left;
+  margin: 1em;
+  border-collapse: collapse;
 }
 tbody {
- border: solid 1px #bbb;
+  border: solid 1px #bbb;
 }
 tfoot {
- font-size: smaller;
- background-color: #fbfbfb;
+  font-size: smaller;
+  background-color: #fbfbfb;
 }
 thead th {
- padding: 3px;
- text-align: left;
- font-size: smaller;
- background-color: #d2dcf1;
- color: #333;
+  padding: 3px;
+  text-align: left;
+  font-size: smaller;
+  background-color: #d2dcf1;
+  color: #333;
 }
 tfoot td {
- padding-left: 6px;
+  padding-left: 6px;
 }
 tfoot tr:first-child td {
- padding-top: 6px;
+  padding-top: 6px;
 }
 tfoot tr:last-child td {
- padding-bottom:6px;
+  padding-bottom:6px;
 }
 tbody td:first-child {
- max-width: 90%;
- padding: 6px 0px 6px 6px;
+  max-width: 90%;
+  padding: 6px 0px 6px 6px;
 }
 tbody td:nth-child(2) {
- padding-right: 6px;
- text-align: right;
+  padding-right: 6px;
+  text-align: right;
 }
 td.win {
- font-weight: bold;
+  font-weight: bold;
 }
 #main {
- max-width: 1200px;
+  max-width: 1200px;
 }
 footer {
- clear: both;
- padding-top: 3em;
+  clear: both;
+  padding-top: 3em;
 }
 </style>
 </head>
@@ -124,31 +124,24 @@ footer {
 </nav>
 
 <section id="main">
-<?php
-
-foreach ($events->event as $evt) :
-    // Create DateTime object from start_date_time and set the desired time zone
-    $time = DateTime::createFromFormat(DateTime::W3C, $evt->start_date_time);
-    $time->setTimeZone(new DateTimeZone($time_zone));
-
-    // Get team objects (https://erikberg.com/api/objects/team)
-    $away_team = $evt->away_team;
-    $home_team = $evt->home_team;
-    $homewin = ($evt->home_points_scored > $evt->away_points_scored) ? 1 : 0;
-?>
+<?php foreach ($events->event as $evt): ?>
 <table>
  <thead>
- <tr>
- <th colspan="2"><?php showStatus($evt); ?></th>
- </tr>
+  <tr>
+   <th colspan="2"><?php showStatus($evt); ?></th>
+  </tr>
  </thead>
- <?php if ($evt->event_status == 'completed'): ?>
-  <tbody>
+ <?php if ($evt->event_status == 'completed'): 
+    // for completed events, test for winning team
+    // we will apply a css "win" class to the winning team's name
+    $homewin = ($evt->home_points_scored > $evt->away_points_scored) ? 1 : 0;
+ ?>
+ <tbody>
   <tr>
   <?php if (!$homewin): ?>
-   <td class="win"><?= $away_team->full_name ?></td>
+   <td class="win"><?= $evt->away_team->full_name ?></td>
   <?php else: ?>
-   <td><?= $away_team->full_name ?></td>
+   <td><?= $evt->away_team->full_name ?></td>
   <?php endif; ?>
    <td>
     <?php if ($evt->event_status == 'completed'): ?>
@@ -158,9 +151,9 @@ foreach ($events->event as $evt) :
   </tr>
   <tr>
   <?php if ($homewin): ?>
-   <td class="win"><?= $home_team->full_name ?></td>
+   <td class="win"><?= $evt->home_team->full_name ?></td>
   <?php else: ?>
-   <td><?= $home_team->full_name ?></td>
+   <td><?= $evt->home_team->full_name ?></td>
   <?php endif; ?>
    <td>
     <?php if ($evt->event_status == 'completed'): ?>
@@ -168,25 +161,30 @@ foreach ($events->event as $evt) :
     <?php endif; ?>
    </td>
   </tr>
-  </tbody>
- <?php else: ?>
-  <tbody>
+ </tbody>
+ <?php else:
+    // For events that are not complete, show the start time instead
+    // Create DateTime object from start_date_time and set the desired time zone
+    $time = DateTime::createFromFormat(DateTime::W3C, $evt->start_date_time);
+    $time->setTimeZone(new DateTimeZone($time_zone));
+ ?>
+ <tbody>
   <tr>
-   <td><?= $away_team->full_name ?></td>
+   <td><?= $evt->away_team->full_name ?></td>
    <td rowspan="2"><?= $time->format('g:i A') ?></td>
   </tr>
   <tr>
-   <td><?= $home_team->full_name ?></td>
+   <td><?= $evt->home_team->full_name ?></td>
   </tr>
-  </tbody>
+ </tbody>
  <?php endif; ?>
  <tfoot>
- <tr>
-  <td colspan="2"><?= $evt->site->name ?></td>
- </tr>
- <tr>
-  <td colspan="2"><?= $evt->site->city, ', ', $evt->site->state ?></td>
- </tr>
+  <tr>
+   <td colspan="2"><?= $evt->site->name ?></td>
+  </tr>
+  <tr>
+   <td colspan="2"><?= $evt->site->city, ', ', $evt->site->state ?></td>
+  </tr>
  </tfoot>
 </table>
 <?php endforeach; ?>
