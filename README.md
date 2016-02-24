@@ -24,8 +24,8 @@ your memcache host and port if it is not running on your local server at the def
 ### Run
 Start a memcache server according to your operating system if one is not already running.
 
-Versions of PHP 5.4 and later provide a built-in server to develop and test PHP scripts quickly. Start
-a server running on your localhost at port 8000.
+Versions of PHP 5.4 and later provide a built-in webserver to develop and test PHP scripts quickly. Start
+a webserver running on your localhost at port 8000.
 ```
 php -S localhost:8000
 ```
