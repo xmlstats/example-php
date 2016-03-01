@@ -55,20 +55,23 @@ $date = DateTime::createFromFormat(DateTime::W3C, $events->events_date);
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Results for <?php showDate($date); ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results for <?php showDate($date); ?></title>
 <style>
 body {
   font-family: sans-serif;
   color: #222;
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 table {
   width: 100%;
   max-width: 300px;
   border: solid 1px #ccc;
-  float: left;
-  margin: 1em;
   border-collapse: collapse;
+  margin-bottom: 2em;
 }
 tbody {
   border: solid 1px #bbb;
@@ -105,12 +108,35 @@ td.win {
   font-weight: bold;
 }
 #main {
-  max-width: 1200px;
+  padding-top: 1em;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-content: flex-start;
+  flex: 1 0 auto;
+}
+footer div,
+#main,
+nav,
+header {
+  margin: 0 auto;
+  max-width: 64em;
 }
 footer {
-  clear: both;
-  padding-top: 3em;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f1f1f1;
+  padding: 1em 0;
 }
+footer img {
+  width: 60px;
+}
+nav {
+  color: #444;
+}
+a:visited { color: #888; text-decoration: none; }
+a:link {color: #888; text-decoration: none; }
+a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -120,7 +146,7 @@ footer {
 </header>
 
 <nav>
-<a href="?<?php dateAdd($date, -1); ?>">Previous</a> | <a href="?<?php dateAdd($date, 1); ?>">Next</a>
+<a href="?<?php dateAdd($date, -1); ?>">Previous</a> | <a href="/">Today</a> | <a href="?<?php dateAdd($date, 1); ?>">Next</a>
 </nav>
 
 <section id="main">
@@ -131,7 +157,7 @@ footer {
    <th colspan="2"><?php showStatus($evt); ?></th>
   </tr>
  </thead>
- <?php if ($evt->event_status == 'completed'): 
+ <?php if ($evt->event_status == 'completed'):
     // for completed events, test for winning team
     // we will apply a css "win" class to the winning team's name
     $homewin = ($evt->home_points_scored > $evt->away_points_scored) ? 1 : 0;
@@ -143,11 +169,7 @@ footer {
   <?php else: ?>
    <td><?= $evt->away_team->full_name ?></td>
   <?php endif; ?>
-   <td>
-    <?php if ($evt->event_status == 'completed'): ?>
-     <?= $evt->away_points_scored ?>
-    <?php endif; ?>
-   </td>
+   <td><?= $evt->away_points_scored ?></td>
   </tr>
   <tr>
   <?php if ($homewin): ?>
@@ -155,11 +177,7 @@ footer {
   <?php else: ?>
    <td><?= $evt->home_team->full_name ?></td>
   <?php endif; ?>
-   <td>
-    <?php if ($evt->event_status == 'completed'): ?>
-     <?= $evt->home_points_scored ?>
-    <?php endif; ?>
-   </td>
+   <td><?= $evt->home_points_scored ?></td>
   </tr>
  </tbody>
  <?php else:
@@ -190,7 +208,9 @@ footer {
 <?php endforeach; ?>
 </section>
 
-<footer></footer>
+<footer>
+ <div></div>
+</footer>
 
 </body>
 </html>
