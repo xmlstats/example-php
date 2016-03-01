@@ -57,87 +57,7 @@ $date = DateTime::createFromFormat(DateTime::W3C, $events->events_date);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Results for <?php showDate($date); ?></title>
-<style>
-body {
-  font-family: sans-serif;
-  color: #222;
-  margin: 0;
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-table {
-  width: 100%;
-  max-width: 300px;
-  border: solid 1px #ccc;
-  border-collapse: collapse;
-  margin-bottom: 2em;
-}
-tbody {
-  border: solid 1px #bbb;
-}
-tfoot {
-  font-size: smaller;
-  background-color: #fbfbfb;
-}
-thead th {
-  padding: 3px;
-  text-align: left;
-  font-size: smaller;
-  background-color: #d2dcf1;
-  color: #333;
-}
-tfoot td {
-  padding-left: 6px;
-}
-tfoot tr:first-child td {
-  padding-top: 6px;
-}
-tfoot tr:last-child td {
-  padding-bottom:6px;
-}
-tbody td:first-child {
-  max-width: 90%;
-  padding: 6px 0px 6px 6px;
-}
-tbody td:nth-child(2) {
-  padding-right: 6px;
-  text-align: right;
-}
-td.win {
-  font-weight: bold;
-}
-#main {
-  padding-top: 1em;
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  align-content: flex-start;
-  flex: 1 0 auto;
-}
-footer div,
-#main,
-nav,
-header {
-  margin: 0 auto;
-  max-width: 64em;
-}
-footer {
-  border-top: 1px solid #e0e0e0;
-  background-color: #f1f1f1;
-  padding: 1em 0;
-}
-footer img {
-  width: 60px;
-}
-nav {
-  color: #444;
-}
-a:visited { color: #888; text-decoration: none; }
-a:link {color: #888; text-decoration: none; }
-a:hover { text-decoration: underline; }
-</style>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
@@ -209,7 +129,9 @@ a:hover { text-decoration: underline; }
 </section>
 
 <footer>
- <div></div>
+ <div>
+  <p><a href="https://erikberg.com/api">xmlstats</a></p>
+ </div>
 </footer>
 
 </body>
