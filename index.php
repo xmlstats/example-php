@@ -7,7 +7,7 @@ $config = parse_ini_file('xmlstats.ini');
 $time_zone = $config['time_zone'];
 date_default_timezone_set($time_zone);
 
-$user_agent = sprintf('xmlstats-phpex/%s (%s)', $config['version'], $config['user_agent_contact']);
+$user_agent = sprintf('xmlstats-exphp/%s (%s)', $config['version'], $config['user_agent_contact']);
 
 $auth_header = sprintf('Authorization: Bearer %s', $config['access_token']);
 
