@@ -71,60 +71,62 @@ $date = DateTime::createFromFormat(DateTime::W3C, $events->events_date);
 
 <section id="main">
 <?php foreach ($events->event as $evt): ?>
-<table>
- <thead>
-  <tr>
-   <th colspan="2"><?php showStatus($evt); ?></th>
-  </tr>
- </thead>
- <?php if ($evt->event_status == 'completed'):
-    // for completed events, test for winning team
-    // we will apply a css "win" class to the winning team's name
-    $homewin = ($evt->home_points_scored > $evt->away_points_scored) ? 1 : 0;
- ?>
- <tbody>
-  <tr>
-  <?php if (!$homewin): ?>
-   <td class="win"><?= $evt->away_team->full_name ?></td>
-  <?php else: ?>
-   <td><?= $evt->away_team->full_name ?></td>
+<div class="event">
+ <table>
+  <thead>
+   <tr>
+    <th colspan="2"><?php showStatus($evt); ?></th>
+   </tr>
+  </thead>
+  <?php if ($evt->event_status == 'completed'):
+     // for completed events, test for winning team
+     // we will apply a css "win" class to the winning team's name
+     $homewin = ($evt->home_points_scored > $evt->away_points_scored) ? 1 : 0;
+  ?>
+  <tbody>
+   <tr>
+   <?php if (!$homewin): ?>
+    <td class="win"><?= $evt->away_team->full_name ?></td>
+   <?php else: ?>
+    <td><?= $evt->away_team->full_name ?></td>
+   <?php endif; ?>
+    <td><?= $evt->away_points_scored ?></td>
+   </tr>
+   <tr>
+   <?php if ($homewin): ?>
+    <td class="win"><?= $evt->home_team->full_name ?></td>
+   <?php else: ?>
+    <td><?= $evt->home_team->full_name ?></td>
+   <?php endif; ?>
+    <td><?= $evt->home_points_scored ?></td>
+   </tr>
+  </tbody>
+  <?php else:
+     // For events that are not complete, show the start time instead
+     // Create DateTime object from start_date_time and set the desired time zone
+     $time = DateTime::createFromFormat(DateTime::W3C, $evt->start_date_time);
+     $time->setTimeZone(new DateTimeZone($time_zone));
+  ?>
+  <tbody>
+   <tr>
+    <td><?= $evt->away_team->full_name ?></td>
+    <td rowspan="2"><?= $time->format('g:i A') ?></td>
+   </tr>
+   <tr>
+    <td><?= $evt->home_team->full_name ?></td>
+   </tr>
+  </tbody>
   <?php endif; ?>
-   <td><?= $evt->away_points_scored ?></td>
-  </tr>
-  <tr>
-  <?php if ($homewin): ?>
-   <td class="win"><?= $evt->home_team->full_name ?></td>
-  <?php else: ?>
-   <td><?= $evt->home_team->full_name ?></td>
-  <?php endif; ?>
-   <td><?= $evt->home_points_scored ?></td>
-  </tr>
- </tbody>
- <?php else:
-    // For events that are not complete, show the start time instead
-    // Create DateTime object from start_date_time and set the desired time zone
-    $time = DateTime::createFromFormat(DateTime::W3C, $evt->start_date_time);
-    $time->setTimeZone(new DateTimeZone($time_zone));
- ?>
- <tbody>
-  <tr>
-   <td><?= $evt->away_team->full_name ?></td>
-   <td rowspan="2"><?= $time->format('g:i A') ?></td>
-  </tr>
-  <tr>
-   <td><?= $evt->home_team->full_name ?></td>
-  </tr>
- </tbody>
- <?php endif; ?>
- <tfoot>
-  <tr>
-   <td colspan="2"><?= $evt->site->name ?></td>
-  </tr>
-  <tr>
-   <td colspan="2"><?= $evt->site->city, ', ', $evt->site->state ?></td>
-  </tr>
- </tfoot>
-</table>
+  <tfoot>
+   <tr>
+    <td colspan="2"><?= $evt->site->name ?></td>
+   </tr>
+   <tr>
+    <td colspan="2"><?= $evt->site->city, ', ', $evt->site->state ?></td>
+   </tr>
+  </tfoot>
+ </table>
+</div>
 <?php endforeach; ?>
 </section>
 
